@@ -35,6 +35,10 @@ jobs:
 
       - name: Type check
         run: yarn type:check
+      
+      - name: Example type check
+        run: yarn type:check
+        working-directory: example
 
       - name: Test
         run: yarn unittest
