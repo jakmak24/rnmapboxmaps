@@ -29,6 +29,7 @@ import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
+import com.mapbox.maps.plugin.gestures.generated.GesturesSettings
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView
@@ -932,4 +933,64 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
     // endregion
 
+    // region Gesture
+    private var mPitchEnabled: Boolean? = null
+    private var mRotateEnabled: Boolean? = null
+    private var mPitchToZoomEnabled: Boolean? = null
+    private var mDoubleTapToZoomInEnabled: Boolean? = null
+    private var mDoubleTouchToZoomOutEnabled: Boolean? =null
+    private var mScrollEnabled: Boolean? = null
+
+    fun setReactPitchEnabled(pitchEnabled:Boolean?){
+        mPitchEnabled = pitchEnabled ?: GesturesSettings().pitchEnabled
+        updateGesture()
+    }
+
+    fun setReactRotateEnabled(rotateEnabled:Boolean?){
+        mRotateEnabled = rotateEnabled ?: GesturesSettings().rotateEnabled
+        updateGesture()
+    }
+
+    fun setReactZoomEnabled(zoomEnabled:Boolean?){
+        if(zoomEnabled != null){
+            mPitchToZoomEnabled = zoomEnabled
+            mDoubleTapToZoomInEnabled = zoomEnabled
+            mDoubleTouchToZoomOutEnabled = zoomEnabled
+        }else{
+            val defaultConfig = GesturesSettings()
+            mPitchToZoomEnabled = defaultConfig.pinchToZoomEnabled
+            mDoubleTapToZoomInEnabled = defaultConfig.doubleTapToZoomInEnabled
+            mDoubleTouchToZoomOutEnabled = defaultConfig.doubleTouchToZoomOutEnabled
+        }
+        updateGesture()
+    }
+
+    fun setReactScrollEnabled(scrollEnabled:Boolean?){
+        mScrollEnabled = scrollEnabled ?: GesturesSettings().scrollEnabled
+        updateGesture()
+    }
+
+    private fun updateGesture(){
+        gestures.updateSettings {
+            if(mRotateEnabled != null){
+                rotateEnabled = mRotateEnabled!!
+            }
+            if(mPitchEnabled!= null){
+                pitchEnabled = mPitchEnabled!!
+            }
+            if(mPitchToZoomEnabled!= null){
+                pinchToZoomEnabled = mPitchToZoomEnabled!!
+            }
+            if(mDoubleTapToZoomInEnabled!= null){
+                doubleTapToZoomInEnabled = mDoubleTapToZoomInEnabled!!
+            }
+            if(mDoubleTouchToZoomOutEnabled!= null){
+                doubleTouchToZoomOutEnabled = mDoubleTouchToZoomOutEnabled!!
+            }
+            if(mScrollEnabled!= null){
+                scrollEnabled = mScrollEnabled!!
+            }
+        }
+    }
+    // endregion
 }
